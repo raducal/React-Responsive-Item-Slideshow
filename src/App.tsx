@@ -1,5 +1,50 @@
 import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import "./App.css";
+
+const MainDiv = styled.div`
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 80%;
+`;
+
+const Button = styled.button`
+  position: relative;
+  height: 100%;
+`;
+
+interface ICarousel {
+  widthOfItems: number;
+}
+
+const CarouselDiv = styled.div<ICarousel>`
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  flex: 2;
+  max-width: ${(props) => props.widthOfItems}px;
+`;
+
+interface ICarouselSlider {
+  transitionValue: number;
+}
+
+const CarouselSlider = styled.div<ICarouselSlider>`
+  position: relative;
+  height: 100%;
+  transform: translateX(-${(props) => props.transitionValue}px);
+  transition: transform 0.45s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+`;
+
+const Carousel = styled.div`
+  display: flex;
+  position: absolute;
+  left: 0;
+  height: 100%;
+`;
 
 const App = () => {
   const [state, setState] = useState({
@@ -88,33 +133,35 @@ const App = () => {
   };
 
   return (
-    <div className="main">
-      <button className="btn btnLeft" onClick={prev}>
-        Prev
-      </button>
-      <div
+    <MainDiv>
+      <Button onClick={prev}>Prev</Button>
+      {/* <div
         className="carouselSection"
         style={{ maxWidth: `${state.widthOfItems}px` }}
-      >
-        <div
+      > */}
+      <CarouselDiv widthOfItems={state.widthOfItems}>
+        {/* <div
           className="container"
           style={{
             transform: `translateX(-${state.transitionValue}px)`,
             transition:
               "transform 0.45s cubic-bezier(0.455, 0.03, 0.515, 0.955)",
           }}
-        >
-          <div className="carousel">
+        > */}
+        <CarouselSlider transitionValue={state.transitionValue}>
+          {/* <div className="carousel"> */}
+          <Carousel>
             {state.items.map((item: string, i: number) => {
               return <Item key={i} itemTitle={item} />;
             })}
-          </div>
-        </div>
-      </div>
-      <button className="btn btnRight" onClick={next}>
-        Next
-      </button>
-    </div>
+          </Carousel>
+          {/* </div> */}
+        </CarouselSlider>
+        {/* </div> */}
+      </CarouselDiv>
+      {/* </div> */}
+      <Button onClick={next}>Next</Button>
+    </MainDiv>
   );
 };
 
